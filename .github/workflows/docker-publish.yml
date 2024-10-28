@@ -28,15 +28,14 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "")
           if [ -z "$latest_tag" ]; then
-            echo "tag=0.0.1" >> $GITHUB_ENV
+            new_tag="v0.0.1"
           else
-            # Auto-increment patch version (e.g., v1.0.0 -> v1.0.1)
             IFS='.' read -r major minor patch <<< "${latest_tag#v}"
             new_tag="v$major.$minor.$((patch + 1))"
-            echo "tag=$new_tag" >> $GITHUB_ENV
           fi
+          echo "tag=$new_tag" >> $GITHUB_ENV
       
       # Create and push new Git tag
       - name: Create and push new tag
