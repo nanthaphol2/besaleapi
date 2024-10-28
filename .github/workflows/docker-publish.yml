@@ -15,7 +15,11 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
     steps:
       # Checkout code
       - name: Checkout code
